@@ -41,8 +41,16 @@ in
   };
 
   hardware.graphics.enable = true;
-  # Die Grafik (Radeon HD 6250) und die Netzwerkkarte brauchen Firmware aus linux-firmware; ohne sie gibt es kein Bild
-  hardware.enableRedistributableFirmware = true;
+  # Die Grafik (Radeon HD 6250) und die Netzwerkkarte brauchen Firmware aus linux-firmware; ohne sie gibt es kein Bild.
+  # Das schlanke Netzwerkstart-Profil schaltet hardware.enableRedistributableFirmware fest ab, deshalb hier gezielt
+  # nur die zwei benötigten Ordner (hält das Abbild im Arbeitsspeicher klein).
+  hardware.firmware = [
+    (pkgs.runCommand "display-firmware" { } ''
+      mkdir -p $out/lib/firmware
+      cp -rL ${pkgs.linux-firmware}/lib/firmware/radeon $out/lib/firmware/
+      cp -rL ${pkgs.linux-firmware}/lib/firmware/rtl_nic $out/lib/firmware/
+    '')
+  ];
   fonts.packages = with pkgs; [ dejavu_fonts liberation_ttf noto-fonts ];
 
   # Ein einziges Programm im Vollbild, ohne Desktop
