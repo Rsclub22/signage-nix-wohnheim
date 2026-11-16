@@ -52,9 +52,6 @@ in
   # Die Grafik (Radeon HD 6250) und die Netzwerkkarte brauchen Firmware aus linux-firmware; ohne sie gibt es kein Bild.
   # Das schlanke Netzwerkstart-Profil schaltet hardware.enableRedistributableFirmware fest ab, deshalb hier gezielt
   # nur die zwei benötigten Ordner (hält das Abbild im Arbeitsspeicher klein).
-  # Ohne Emoji-Schrift zeigen eingebettete Webseiten leere Kästchen statt Symbolen
-  fonts.packages = [ pkgs.noto-fonts-color-emoji ];
-
   hardware.firmware = [
     (pkgs.runCommand "display-firmware" { } ''
       mkdir -p $out/lib/firmware
@@ -62,7 +59,8 @@ in
       cp -rL ${pkgs.linux-firmware}/lib/firmware/rtl_nic $out/lib/firmware/
     '')
   ];
-  fonts.packages = with pkgs; [ dejavu_fonts liberation_ttf noto-fonts ];
+  # Emoji-Schrift: ohne sie zeigen eingebettete Webseiten leere Kästchen statt Symbolen
+  fonts.packages = with pkgs; [ dejavu_fonts liberation_ttf noto-fonts noto-fonts-color-emoji ];
 
   # Ein einziges Programm im Vollbild, ohne Desktop
   services.cage = {
