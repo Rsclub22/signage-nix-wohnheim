@@ -1,4 +1,4 @@
-# Arbeitsplatz für die Pflege der Aushänge: ein eigenes Konto ohne Verwaltungsrechte und ein Starter, der die
+# Arbeitsplatz für die Pflege der Aushänge: ein eigenes Konto (ohne Verwaltungsrechte am System) und ein Starter, der die
 # Xibo-Oberfläche als eigenes Fenster öffnet (ohne Adressleiste, wie ein Programm).
 { pkgs, ... }:
 let
@@ -12,11 +12,23 @@ let
   };
 in
 {
-  # Das Passwort wird am Gerät gesetzt (sudo passwd hausmeister), nie hier
+  # Der Rechner steht im Raum des Hausmeisters und startet ohne Anmeldung direkt in dessen Konto. Das Konto hat
+  # bewusst kein Passwort; von außen ist es nicht nutzbar, weil SSH nur Schlüssel annimmt.
   users.users.hausmeister = {
     isNormalUser = true;
     description = "Hausmeister";
+    initialHashedPassword = "";
   };
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "hausmeister";
+  };
+  # Keine Bildschirmsperre: Ein Konto ohne Passwort soll sich nicht selbst aussperren
+  environment.etc."xdg/kscreenlockerrc".text = ''
+    [Daemon]
+    Autolock=false
+    LockOnResume=false
+  '';
 
   environment.systemPackages = [ pkgs.chromium aushang ];
 
