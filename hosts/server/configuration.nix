@@ -1,0 +1,42 @@
+# Server des Aushang-Bildschirms: Arbeitsplatz für die Pflege der Seiten und Quelle für den Anzeige-Client.
+# Stand: Grundinstallation. Signage-Software, das Netz zum Client und die Updates kommen noch.
+{ config, pkgs, ... }:
+{
+  imports = [ ./hardware-configuration.nix ];
+
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/disk/by-id/ata-SAMSUNG_HD161GJ_S14DJ9GZ604824";
+
+  networking.hostName = "signage-mlr-sm-srv01";
+  networking.networkmanager.enable = true;
+
+  time.timeZone = "Europe/Berlin";
+  i18n.defaultLocale = "de_DE.UTF-8";
+  console.keyMap = "de";
+
+  services.xserver.enable = true;
+  services.xserver.xkb.layout = "de";
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
+
+  users.users.philipp = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ];
+    openssh.authorizedKeys.keyFiles = [ ./authorized_keys ];
+  };
+  # Nur für den Aufbau: Das Konto hat noch kein Passwort, Anmeldung geht allein per SSH-Schlüssel.
+  # Wird wieder entfernt, sobald das Passwort am Gerät gesetzt ist.
+  security.sudo.wheelNeedsPassword = false;
+
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+    settings.PermitRootLogin = "no";
+  };
+
+  environment.systemPackages = with pkgs; [ git vim ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  system.stateVersion = "26.05";
+}
