@@ -19,7 +19,7 @@ in
   fileSystems."/var/lib/signage" = {
     device = "/dev/disk/by-label/signage-data";
     fsType = "ext4";
-    options = [ "nofail" "x-systemd.device-timeout=15s" ];
+    options = [ "nofail" "x-systemd.device-timeout=60s" ];
   };
   users.users.signage = {
     isNormalUser = true;
@@ -27,9 +27,22 @@ in
     createHome = false;
     extraGroups = [ "video" "audio" "input" ];
   };
-  systemd.tmpfiles.rules = [ "d /var/lib/signage/home 0700 signage users -" ];
+  # Das Heimatverzeichnis liegt auf der Datenpartition und wird erst nach deren Einhängen angelegt
+  systemd.services.signage-home = {
+    description = "Heimatverzeichnis der Anzeige auf der Datenpartition";
+    wantedBy = [ "multi-user.target" ];
+    before = [ "cage-tty1.service" ];
+    after = [ "var-lib-signage.mount" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.coreutils}/bin/install -d -o signage -g users -m 0700 /var/lib/signage/home";
+    };
+  };
 
   hardware.graphics.enable = true;
+  # Die Grafik (Radeon HD 6250) und die Netzwerkkarte brauchen Firmware aus linux-firmware; ohne sie gibt es kein Bild
+  hardware.enableRedistributableFirmware = true;
   fonts.packages = with pkgs; [ dejavu_fonts liberation_ttf noto-fonts ];
 
   # Ein einziges Programm im Vollbild, ohne Desktop
@@ -39,7 +52,8 @@ in
     program = "${xibo-player}/bin/xibo-player";
   };
   systemd.services."cage-tty1" = {
-    after = [ "var-lib-signage.mount" "systemd-tmpfiles-setup.service" "network-online.target" ];
+    after = [ "signage-home.service" "network-online.target" ];
+    requires = [ "signage-home.service" ];
     wants = [ "network-online.target" ];
     serviceConfig.Restart = "always";
     serviceConfig.RestartSec = 5;
