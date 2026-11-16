@@ -19,6 +19,7 @@ Server und Client stehen in einem eigenen kleinen Netz hinter einem Router. Der 
 Rechner, der dort über das Netz startet; in ein größeres Netz gehört er nicht.
 
 Was beim Aufbau an der Hardware aufgefallen ist, steht in [docs/hardware.md](docs/hardware.md).
+Wie Xibo eingerichtet wird und was beim Einbetten von Webseiten zu beachten ist, steht in [docs/xibo.md](docs/xibo.md).
 
 ## Anwenden
 
