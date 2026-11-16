@@ -59,5 +59,8 @@ in
     serviceConfig.RestartSec = 5;
   };
 
+  # Schnelleres, weniger speicherhungriges Packen des Abbilds; im eigenen Netz spielt die Größe keine Rolle
+  netboot.squashfsCompression = "zstd -Xcompression-level 6";
+
   system.stateVersion = "26.05";
 }

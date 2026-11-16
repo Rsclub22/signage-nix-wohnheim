@@ -44,6 +44,12 @@
 
   environment.systemPackages = with pkgs; [ git vim ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Der alte Rechner ist beim Bauen unter Volllast eingefroren (16.11.2026): Bauen läuft gebremst und mit Nachrang,
+  # damit Verwaltung und Anzeige dabei weiterlaufen.
+  nix.settings.max-jobs = 1;
+  nix.settings.cores = 2;
+  nix.daemonCPUSchedPolicy = "idle";
+  nix.daemonIOSchedClass = "idle";
 
   system.stateVersion = "26.05";
 }
