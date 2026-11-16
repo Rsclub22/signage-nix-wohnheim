@@ -6,7 +6,12 @@
   outputs = { self, nixpkgs }:
     let
       system = "x86_64-linux";
-      # Startabbild für den Anzeige-Client: läuft im Arbeitsspeicher und dient der Erstinstallation über das Netz
+      # Abbild des Anzeige-Clients: Der Server liefert es bei jedem Start über das Netz aus, es läuft im Arbeitsspeicher
+      clientDisplay = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ ./hosts/client/display.nix ];
+      };
+      # Reines Wartungsabbild ohne Anzeige, wird derzeit nicht ausgeliefert
       clientInstaller = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [ ./hosts/client/installer.nix ];
@@ -15,9 +20,10 @@
     {
       nixosConfigurations.signage-mlr-sm-srv01 = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { clientInstaller = clientInstaller.config.system.build; };
+        specialArgs = { clientImage = clientDisplay.config.system.build; };
         modules = [ ./hosts/server/configuration.nix ./hosts/server/netboot.nix ./hosts/server/xibo.nix ];
       };
+      nixosConfigurations.client-display = clientDisplay;
       nixosConfigurations.client-installer = clientInstaller;
     };
 }
