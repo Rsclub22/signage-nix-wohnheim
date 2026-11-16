@@ -14,6 +14,13 @@
   i18n.defaultLocale = "de_DE.UTF-8";
   console.keyMap = "de";
 
+  # Der Rechner bedient die Anzeige und darf nie von selbst schlafen gehen, auch nicht auf Wunsch des Desktops
+  # (Plasma hatte ihn nach einer Viertelstunde ohne Eingabe in den Ruhezustand geschickt).
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
   services.xserver.enable = true;
   services.xserver.xkb.layout = "de";
   services.displayManager.sddm.enable = true;
