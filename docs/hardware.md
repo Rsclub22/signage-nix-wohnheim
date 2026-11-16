@@ -46,8 +46,10 @@ von NixOS (`netboot-minimal.nix`) schaltet den Schalter fest ab und setzt sich o
 Einstellung hinweg. Die Firmware-Ordner `radeon` und `rtl_nic` kommen deshalb gezielt über `hardware.firmware` ins
 Abbild. Prüfen lässt sich das am fertigen System unter `/run/current-system/firmware/radeon`.
 
-**Datenpartition.** Die SSD meldet sich beim Start spät. Mit 15 Sekunden Wartezeit kam „Timed out waiting for
-device“; jetzt sind es 60 Sekunden. Das Heimatverzeichnis der Anzeige wird erst nach dem Einhängen angelegt (Dienst
+**Datenpartition.** Die SSD meldet sich beim Start spät: gemessen 88 Sekunden nach dem Einschalten, rund 50 Sekunden
+nach dem Erkennen der Verbindung. Mit 15 und mit 60 Sekunden Wartezeit kam „Timed out waiting for device“, der Start
+blieb danach am Dienst `signage-home` hängen. Jetzt sind es 300 Sekunden. Hilfe am Gerät, falls es doch passiert:
+`sudo systemctl start var-lib-signage.mount`. Das Heimatverzeichnis der Anzeige wird erst nach dem Einhängen angelegt (Dienst
 `signage-home`), sonst landet es im Arbeitsspeicher und wird überdeckt.
 
 **Leistung.** Das Abbild läuft im Arbeitsspeicher; mit laufendem Abspieler bleiben rund 1,4 GB frei. Ob der eine

@@ -19,7 +19,9 @@ in
   fileSystems."/var/lib/signage" = {
     device = "/dev/disk/by-label/signage-data";
     fsType = "ext4";
-    options = [ "nofail" "x-systemd.device-timeout=60s" ];
+    # Die SSD meldet sich auf dem langsamen Gerät erst rund 90 Sekunden nach dem Start (gemessen: 88 s);
+    # 60 Sekunden Wartezeit waren zu knapp, das Einhängen gab auf und der Abspieler blieb hängen.
+    options = [ "nofail" "x-systemd.device-timeout=300s" ];
   };
   users.users.signage = {
     isNormalUser = true;
@@ -39,7 +41,7 @@ in
       # Die Platte meldet sich spät, und die Reihenfolge der Einheiten allein hat nicht gereicht (das Verzeichnis
       # entstand vor dem Einhängen und wurde überdeckt): ausdrücklich auf den Einhängepunkt warten.
       ExecStart = pkgs.writeShellScript "signage-home" ''
-        for i in $(${pkgs.coreutils}/bin/seq 1 90); do
+        for i in $(${pkgs.coreutils}/bin/seq 1 300); do
           ${pkgs.util-linux}/bin/mountpoint -q /var/lib/signage && break
           ${pkgs.coreutils}/bin/sleep 1
         done
