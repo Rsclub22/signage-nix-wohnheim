@@ -18,6 +18,8 @@ System über das Netz aus. Automatische Updates fehlen noch.
 Server und Client stehen in einem eigenen kleinen Netz hinter einem Router. Der Startdienst des Servers antwortet jedem
 Rechner, der dort über das Netz startet; in ein größeres Netz gehört er nicht.
 
+Was beim Aufbau an der Hardware aufgefallen ist, steht in [docs/hardware.md](docs/hardware.md).
+
 ## Anwenden
 
 Auf dem Server:
