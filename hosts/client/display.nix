@@ -36,7 +36,15 @@ in
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.coreutils}/bin/install -d -o signage -g users -m 0700 /var/lib/signage/home";
+      # Die Platte meldet sich spät, und die Reihenfolge der Einheiten allein hat nicht gereicht (das Verzeichnis
+      # entstand vor dem Einhängen und wurde überdeckt): ausdrücklich auf den Einhängepunkt warten.
+      ExecStart = pkgs.writeShellScript "signage-home" ''
+        for i in $(${pkgs.coreutils}/bin/seq 1 90); do
+          ${pkgs.util-linux}/bin/mountpoint -q /var/lib/signage && break
+          ${pkgs.coreutils}/bin/sleep 1
+        done
+        ${pkgs.coreutils}/bin/install -d -o signage -g users -m 0700 /var/lib/signage/home
+      '';
     };
   };
 
