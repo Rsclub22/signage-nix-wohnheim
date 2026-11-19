@@ -76,6 +76,8 @@ in
     wants = [ "network-online.target" ];
     serviceConfig.Restart = "always";
     serviceConfig.RestartSec = 5;
+    # dunkle Fensterfarben im Abspieler (am 16.11.2026 am Bildschirm bestätigt)
+    environment.GTK_THEME = "Adwaita:dark";
   };
 
   # Schnelleres, weniger speicherhungriges Packen des Abbilds; im eigenen Netz spielt die Größe keine Rolle

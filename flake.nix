@@ -21,7 +21,7 @@
       nixosConfigurations.signage-mlr-sm-srv01 = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { clientImage = clientDisplay.config.system.build; };
-        modules = [ ./hosts/server/configuration.nix ./hosts/server/netboot.nix ./hosts/server/xibo.nix ./hosts/server/hausmeister.nix ];
+        modules = [ ./hosts/server/configuration.nix ./hosts/server/netboot.nix ./hosts/server/xibo.nix ./hosts/server/abfahrtstafel.nix ./hosts/server/hausmeister.nix ];
       };
       nixosConfigurations.client-display = clientDisplay;
       nixosConfigurations.client-installer = clientInstaller;

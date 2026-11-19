@@ -38,10 +38,12 @@ Cookie vorab setzen. Eine Seite muss sich also vollständig über ihre Adresse s
 
 ## Abfahrtstafel
 
-`https://abfahrtstafel2.wagnersnetz.de` (Quelle: `Rsclub22/DB-JSON-Stationboard`) nimmt die Station bisher nur über
-ihr Formular an und merkt sie sich in einem Cookie. Für die Anzeige braucht sie die Station in der Adresse.
-Vorgesehen: `/?station_name=USMS&dark=1` (USMS ist das Kürzel für Schmalkalden). Die Änderung an der Seite ist
-vorbereitet, aber noch nicht veröffentlicht; bis dahin zeigt die Anzeige die Seite ohne Station.
+Die Tafel läuft seit 19.11.2026 lokal auf dem Server (`hosts/server/abfahrtstafel.nix`), als Container aus dem
+Image `rsclub22/hafas-db-depature-board` (Quelle `Rsclub22/DB-JSON-Stationboard`, per Digest festgenagelt). Sie
+hängt damit nicht mehr an `abfahrtstafel2.wagnersnetz.de`; die Abfahrtsdaten holt sie weiter aus dem Internet.
+
+Adresse für das Webseiten-Element in Xibo: `http://192.168.0.100:8080/?station_name=USMS&dark=1` (USMS ist das
+Kürzel für Schmalkalden, `dark=1` der dunkle Modus). Die Adresse des Servers ist noch nicht fest (vergibt der Router).
 
 ## Stand des Testaufbaus
 

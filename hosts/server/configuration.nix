@@ -42,7 +42,9 @@
     settings.PermitRootLogin = "no";
   };
 
-  environment.systemPackages = with pkgs; [ git vim ];
+  environment.systemPackages = with pkgs; [ git vim smartmontools ];
+  # Die Platte des Servers ist alt (Samsung HD161GJ): SMART-Werte überwachen, Ausfälle im Journal
+  services.smartd.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # Der alte Rechner ist beim Bauen unter Volllast eingefroren (16.11.2026): Bauen läuft gebremst und mit Nachrang,
   # damit Verwaltung und Anzeige dabei weiterlaufen.
