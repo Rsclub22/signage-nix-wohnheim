@@ -43,7 +43,12 @@ Image `rsclub22/hafas-db-depature-board` (Quelle `Rsclub22/DB-JSON-Stationboard`
 hängt damit nicht mehr an `abfahrtstafel2.wagnersnetz.de`; die Abfahrtsdaten holt sie weiter aus dem Internet.
 
 Adresse für das Webseiten-Element in Xibo: `http://192.168.0.100:8080/?station_name=USMS&dark=1` (USMS ist das
-Kürzel für Schmalkalden, `dark=1` der dunkle Modus). Die Adresse des Servers ist noch nicht fest (vergibt der Router).
+Kürzel für Schmalkalden, `dark=1` der dunkle Modus). Der Server bekommt bewusst keine feste Adresse; ab dem
+nächsten Bau meldet er sich per mDNS als `signage-mlr-sm-srv01.local`. Danach im Abspieler (`cmsUrl`) und im Layout
+`192.168.0.100` durch diesen Namen ersetzen (ob Electron `.local` auflöst, ist noch zu prüfen).
+
+Ohne Internet (Test 20.11.2026, nur rund eine Minute): Verwaltung und Abspieler laufen weiter. Die Tafel antwortet
+bei einem neuen Aufruf mit 500; eine schon geladene Seite bleibt stehen. Offen: ruhige Meldung statt Fehlerseite.
 
 ## Stand des Testaufbaus
 

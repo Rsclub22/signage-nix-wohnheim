@@ -9,6 +9,8 @@ in
   imports = [ (modulesPath + "/installer/netboot/netboot-minimal.nix") ];
 
   networking.hostName = "signage-mlr-sm-display01";
+  # Server per Name finden (signage-mlr-sm-srv01.local), er hat keine feste Adresse
+  services.avahi = { enable = true; nssmdns4 = true; };
   time.timeZone = "Europe/Berlin";
   console.keyMap = "de";
 

@@ -9,6 +9,24 @@
 
   networking.hostName = "signage-mlr-sm-srv01";
   networking.networkmanager.enable = true;
+  # Keine feste Adresse (Philipp, 20.11.2026): Der Server meldet sich per mDNS als signage-mlr-sm-srv01.local.
+  # Anzeige und Xibo-Adressen nutzen diesen Namen statt der IP, die der Router vergibt.
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = { enable = true; addresses = true; };
+  };
+  # Updates holt sich der Server nachts selbst aus dem öffentlichen Repo. Ohne Internet schlägt der Lauf fehl
+  # und die laufende Generation bleibt. Kein automatischer Neustart; der Anzeige-Client bekommt das neue Abbild
+  # bei seinem nächsten Start.
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:Rsclub22/signage-nix-wohnheim#signage-mlr-sm-srv01";
+    dates = "03:30";
+    randomizedDelaySec = "30min";
+    allowReboot = false;
+  };
 
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "de_DE.UTF-8";
